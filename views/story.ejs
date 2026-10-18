@@ -2,18 +2,14 @@
   <div class="col-lg-9">
     <!-- Story Card -->
     <div class="card p-4 shadow-sm bg-white border mb-4">
-      
-      <!-- Category Badge -->
       <div class="mb-2">
         <a href="/?category=<%= encodeURIComponent(story.category) %>" class="badge text-decoration-none px-3 py-2" style="background-color: #fff3cd; color: #856404; font-size: 0.9rem;">
           📁 <%= story.category %>
         </a>
       </div>
 
-      <!-- Story Title -->
       <h1 class="fw-bold mb-3" style="color: #6a1b1a;"><%= story.title %></h1>
 
-      <!-- Meta Info -->
       <div class="d-flex flex-wrap align-items-center gap-3 text-muted small pb-3 mb-4 border-bottom">
         <span>✍️ రచయిత: <b><%= story.author_name || 'రచయిత' %></b></span>
         <span>📅 ప్రచురణ: <%= new Date(story.created_at).toLocaleDateString('te-IN') %></span>
@@ -21,19 +17,16 @@
         <span>❤️ <%= story.likes %> లైకులు</span>
       </div>
 
-      <!-- Cover Image (If exists) -->
       <% if (story.image_url) { %>
         <div class="text-center mb-4">
           <img src="<%= story.image_url %>" class="img-fluid rounded" style="max-height: 400px; object-fit: cover;" alt="<%= story.title %>">
         </div>
       <% } %>
 
-      <!-- Story Content -->
       <div class="story-content fs-5 mb-4" style="line-height: 1.9; white-space: pre-wrap; color: #2b2b2b;">
 <%= story.content %>
       </div>
 
-      <!-- Like Button & Author Controls -->
       <div class="d-flex align-items-center gap-3 pt-3 border-top">
         <form action="/story/<%= story.slug %>/like" method="POST" class="m-0">
           <button type="submit" class="btn btn-outline-danger px-3 py-2 fw-semibold">
@@ -43,33 +36,42 @@
 
         <% if (currentUser && currentUser.is_admin) { %>
           <form action="/story/<%= story.id %>/delete" method="POST" class="m-0 ms-auto" onsubmit="return confirm('ఈ కథను తొలగించాలనుకుంటున్నారా?');">
-            <button type="submit" class="btn btn-sm btn-danger">🗑️ కథను తొలగించండి (Admin)</button>
+            <button type="submit" class="btn btn-sm btn-danger">🗑️ తొలగించండి (Admin)</button>
           </form>
         <% } %>
       </div>
+    </div>
 
-      <!-- Private Message to Author -->
-      <% if (currentUser && currentUser.id !== story.author_id) { %>
-        <div class="card mt-4 p-3 bg-light border">
-          <h6 class="fw-bold mb-2">రచయితకు వ్యక్తిగత సందేశం పంపండి</h6>
+    <!-- 1. Private Chat with Writer Box -->
+    <div class="card p-4 shadow-sm bg-white border mb-4">
+      <h5 class="fw-bold mb-2" style="color: #6a1b1a;">✉️ రచయితతో నేరుగా మాట్లాడండి (Chat with Writer)</h5>
+      <p class="text-muted small mb-3">మీరు పంపే సందేశం గోప్యంగా కేవలం రచయిత డాష్‌బోర్డ్‌లో మాత్రమే కనిపిస్తుంది.</p>
+      
+      <% if (currentUser) { %>
+        <% if (currentUser.id === story.author_id) { %>
+          <div class="alert alert-light border small text-muted mb-0">మీరు ఈ కథ యొక్క రచయిత. పాఠకులు మీకు సందేశాలు పంపినప్పుడు మీ డాష్‌బోర్డ్‌లో కనిపిస్తాయి.</div>
+        <% } else { %>
           <form action="/messages/send" method="POST">
             <input type="hidden" name="receiver_id" value="<%= story.author_id %>">
             <input type="hidden" name="story_id" value="<%= story.id %>">
             <input type="hidden" name="redirect_url" value="/story/<%= story.slug %>">
             <div class="input-group">
-              <input type="text" name="message" class="form-control" placeholder="మీ సందేశాన్ని ఇక్కడ రాయండి..." required>
-              <button class="btn btn-maroon" type="submit">పంపండి</button>
+              <input type="text" name="message" class="form-control" placeholder="రచయితకు మీ వ్యక్తిగత సందేశాన్ని రాయండి..." required>
+              <button class="btn btn-maroon px-4 fw-semibold" type="submit">పంపండి</button>
             </div>
           </form>
+        <% } %>
+      <% } else { %>
+        <div class="p-3 bg-light rounded text-center small">
+          రచయితకు వ్యక్తిగత సందేశం పంపడానికి దయచేసి <a href="/login" class="fw-bold" style="color: #6a1b1a;">లాగిన్ అవ్వండి</a>.
         </div>
       <% } %>
     </div>
 
-    <!-- Public Comments Section -->
+    <!-- 2. Public Comments Section -->
     <div class="card p-4 shadow-sm bg-white border">
-      <h4 class="fw-bold mb-4" style="color: #6a1b1a;">💬 బహిరంగ సమీక్షలు (Public Comments)</h4>
+      <h5 class="fw-bold mb-3" style="color: #6a1b1a;">💬 బహిరంగ సమీక్షలు (Public Comments)</h5>
 
-      <!-- Comment Form -->
       <form action="/story/<%= story.slug %>/comment" method="POST" class="mb-4">
         <% if (!currentUser) { %>
           <div class="mb-3">
@@ -82,7 +84,6 @@
         <button type="submit" class="btn btn-maroon px-4 py-2 fw-semibold">సమీక్షను పంపండి</button>
       </form>
 
-      <!-- Comments List -->
       <% if (comments && comments.length > 0) { %>
         <div class="d-flex flex-column gap-3">
           <% comments.forEach(c => { %>

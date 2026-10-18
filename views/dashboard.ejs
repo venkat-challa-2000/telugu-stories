@@ -1,120 +1,76 @@
-<%- include('layout', { body: `
-  <div class="max-w-5xl mx-auto space-y-8">
-    
-    <!-- User Welcome Header -->
-    <div class="bg-white p-6 md:p-8 rounded-2xl border border-stone-200 shadow-sm flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-      <div>
-        <h1 class="text-2xl md:text-3xl font-extrabold text-stone-900 telugu-title">రచయిత డ్యాష్‌బోర్డ్ (My Dashboard)</h1>
-        <p class="text-xs text-stone-500 mt-1">నమస్కారం <strong>${currentUser.username}</strong>! మీ రచనల గణాంకాలు మరియు పాఠకుల సందేశాలు ఇక్కడ ఉన్నాయి.</p>
-      </div>
-      <a href="/submit" class="bg-red-900 hover:bg-red-800 text-white px-4 py-2 rounded-xl font-bold text-xs shadow transition">
-        + కొత్త కథ రాయండి
-      </a>
-    </div>
-
-    <!-- 1. AUTHOR STORIES LIST WITH STATS (Views, Likes, Comments) -->
-    <div class="bg-white p-6 md:p-8 rounded-2xl border border-stone-200 shadow-sm">
-      <h2 class="text-lg font-bold text-stone-900 mb-4 pb-2 border-b flex items-center gap-2">
-        <span>📚</span> మీరు అప్‌లోడ్ చేసిన కథలు (${myStories.length})
-      </h2>
-
-      ${myStories.length === 0 ? `
-        <div class="py-10 text-center text-stone-400 text-xs">
-          మీరు ఇంకా ఏ కథలూ ప్రచురించలేదు. మీ మొదటి కథను ఇప్పుడే రాయండి!
-        </div>
-      ` : `
-        <div class="overflow-x-auto">
-          <table class="w-full text-left text-xs border-collapse">
-            <thead>
-              <tr class="bg-stone-50 text-stone-700 uppercase font-bold border-b border-stone-200">
-                <th class="p-3">శీర్షిక (Story Title)</th>
-                <th class="p-3">విభాగం</th>
-                <th class="p-3">వీక్షణలు (Views)</th>
-                <th class="p-3">లైకులు (Likes)</th>
-                <th class="p-3">సమీక్షలు (Comments)</th>
-                <th class="p-3">తేదీ</th>
-                <th class="p-3 text-right">చూడండి</th>
-              </tr>
-            </thead>
-            <tbody class="divide-y divide-stone-100">
-              ${myStories.map(s => `
-                <tr class="hover:bg-amber-50/40 transition">
-                  <td class="p-3 font-bold text-stone-900 min-w-[200px]">
-                    <a href="/story/${s.slug}" class="hover:text-red-900 underline">${s.title}</a>
-                  </td>
-                  <td class="p-3 text-stone-600">
-                    <span class="bg-amber-100 text-amber-900 px-2 py-0.5 rounded text-[11px] font-semibold">${s.category}</span>
-                  </td>
-                  <td class="p-3 font-bold text-stone-800">
-                    👁️ ${s.views || 0}
-                  </td>
-                  <td class="p-3 font-bold text-red-700">
-                    ❤️ ${s.likes || 0}
-                  </td>
-                  <td class="p-3 text-stone-700 font-semibold">
-                    💬 ${s.total_comments || 0}
-                  </td>
-                  <td class="p-3 text-stone-400 text-[11px]">
-                    ${new Date(s.created_at).toLocaleDateString()}
-                  </td>
-                  <td class="p-3 text-right">
-                    <a href="/story/${s.slug}" class="bg-stone-100 hover:bg-stone-200 text-stone-800 px-2.5 py-1 rounded text-[11px] font-bold">ఓపెన్ →</a>
-                  </td>
-                </tr>
-              `).join('')}
-            </tbody>
-          </table>
-        </div>
-      `}
-    </div>
-
-    <!-- 2. DIRECT PRIVATE MESSAGES & REPLIES (Chat Box) -->
-    <div class="bg-white p-6 md:p-8 rounded-2xl border border-stone-200 shadow-sm">
-      <div class="flex items-center gap-2 mb-4 pb-2 border-b">
-        <span class="text-xl">✉️</span>
-        <h2 class="text-lg font-bold text-stone-900">పాఠకుల నుండి వచ్చిన ప్రైవేట్ సందేశాలు (${receivedMessages.length})</h2>
-      </div>
-
-      ${receivedMessages.length === 0 ? `
-        <div class="py-10 text-center text-stone-400 text-xs">
-          ఇంకా ఎటువంటి వ్యక్తిగత సందేశాలూ రాలేదు. పాఠకులు మీకు మెసేజ్ పంపినప్పుడు ఇక్కడ కనిపిస్తాయి.
-        </div>
-      ` : `
-        <div class="space-y-4">
-          ${receivedMessages.map(m => `
-            <div class="bg-stone-50 p-4 rounded-xl border border-stone-200 space-y-2">
-              <div class="flex justify-between items-center">
-                <span class="text-xs font-bold text-stone-900">
-                  👤 పంపినవారు: <span class="text-red-900 font-extrabold">${m.sender_name}</span>
-                  ${m.story_title ? `<span class="text-stone-400 font-normal">("${m.story_title}" కథపై)</span>` : ''}
-                </span>
-                <span class="text-[10px] text-stone-400">${new Date(m.created_at).toLocaleString()}</span>
-              </div>
-
-              <div class="bg-white p-3 rounded-lg border border-stone-100 text-xs text-stone-800 leading-relaxed">
-                "${m.message}"
-              </div>
-
-              <!-- Direct Reply Box back to Sender -->
-              <details class="text-xs pt-1">
-                <summary class="cursor-pointer text-red-900 font-bold hover:underline select-none">
-                  ↩️ ${m.sender_name} గారికి సమాధానం (Reply) ఇవ్వండి
-                </summary>
-                <form action="/messages/send" method="POST" class="mt-2 space-y-2">
-                  <input type="hidden" name="receiver_id" value="${m.sender_id}">
-                  <input type="hidden" name="story_id" value="${m.story_id || ''}">
-                  <input type="hidden" name="redirect_url" value="/my-dashboard">
-                  <textarea name="message" rows="2" required placeholder="${m.sender_name} గారికి రిప్లై రాయండి..." class="w-full border p-2.5 rounded-lg text-xs outline-none bg-white focus:ring-2 focus:ring-red-900"></textarea>
-                  <button type="submit" class="bg-stone-900 text-white px-4 py-1.5 rounded-lg text-xs font-bold hover:bg-stone-800">
-                    సమాధానం పంపండి
-                  </button>
-                </form>
-              </details>
-            </div>
-          `).join('')}
-        </div>
-      `}
-    </div>
-
+<div class="card p-4 shadow-sm bg-white border-0 my-3">
+  <div class="mb-4">
+    <h3 class="fw-bold" style="color: #6a1b1a;">రచయిత డ్యాష్‌బోర్డ్ (My Dashboard)</h3>
+    <p class="text-muted mb-0">నమస్కారం <b><%= currentUser.username %></b>! మీ రచనల గణాంకాలు మరియు పాఠకుల సందేశాలు ఇక్కడ ఉన్నాయి.</p>
   </div>
-` }) %>
+
+  <!-- Uploaded Stories -->
+  <div class="mb-5">
+    <h5 class="fw-bold mb-3 d-flex align-items-center gap-2">
+      <span>📚</span> <span>మీరు అప్‌లోడ్ చేసిన కథలు (<%= myStories.length %>)</span>
+    </h5>
+    <div class="table-responsive">
+      <table class="table table-hover align-middle border">
+        <thead class="table-light">
+          <tr>
+            <th>శీర్షిక (Story Title)</th>
+            <th>విభాగం</th>
+            <th>వీక్షణలు (Views)</th>
+            <th>లైకులు (Likes)</th>
+            <th>సమీక్షలు (Comments)</th>
+            <th>తేదీ</th>
+            <th>చూడండి</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (myStories && myStories.length > 0) { %>
+            <% myStories.forEach(s => { %>
+              <tr>
+                <td class="fw-bold"><%= s.title %></td>
+                <td><span class="badge bg-light text-dark border"><%= s.category %></span></td>
+                <td><i class="fa fa-eye text-primary"></i> <%= s.views %></td>
+                <td><i class="fa fa-heart text-danger"></i> <%= s.likes %></td>
+                <td><i class="fa fa-comment text-secondary"></i> <%= s.total_comments %></td>
+                <td><%= new Date(s.created_at).toLocaleDateString('te-IN') %></td>
+                <td><a href="/story/<%= s.slug %>" class="text-decoration-none fw-semibold" style="color: #6a1b1a;">ఓపెన్ →</a></td>
+              </tr>
+            <% }) %>
+          <% } else { %>
+            <tr>
+              <td colspan="7" class="text-center text-muted py-4">మీరు ఇంకా ఏ కథలూ ప్రచురించలేదు.</td>
+            </tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Reader Private Messages -->
+  <div>
+    <h5 class="fw-bold mb-3 d-flex align-items-center gap-2">
+      <span>✉️</span> <span>పాఠకుల నుండి వచ్చిన ప్రైవేట్ సందేశాలు (<%= receivedMessages.length %>)</span>
+    </h5>
+    <% if (receivedMessages && receivedMessages.length > 0) { %>
+      <div class="d-flex flex-column gap-3">
+        <% receivedMessages.forEach(m => { %>
+          <div class="p-3 bg-light rounded border">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <span class="fw-bold text-dark">👤 <%= m.sender_name %></span>
+              <small class="text-muted"><%= new Date(m.created_at).toLocaleString('te-IN') %></small>
+            </div>
+            <% if (m.story_title) { %>
+              <div class="small text-muted mb-2">
+                సంబంధిత రచన: <a href="/story/<%= m.story_slug %>" class="fw-semibold text-decoration-none" style="color: #6a1b1a;"><%= m.story_title %></a>
+              </div>
+            <% } %>
+            <p class="mb-0 text-dark bg-white p-2 rounded border-start border-3 border-danger"><%= m.message %></p>
+          </div>
+        <% }) %>
+      </div>
+    <% } else { %>
+      <div class="p-4 text-center text-muted border rounded bg-light">
+        ఇంకా ఎటువంటి వ్యక్తిగత సందేశాలూ రాలేదు. పాఠకులు మీకు మెసేజ్ పంపినప్పుడు ఇక్కడ కనిపిస్తాయి.
+      </div>
+    <% } %>
+  </div>
+</div>

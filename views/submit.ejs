@@ -1,43 +1,75 @@
-<%- include('layout', { body: `
-  <div class="max-w-2xl mx-auto bg-white p-6 md:p-8 rounded-2xl border border-stone-200 shadow-md">
-    <div class="border-b pb-4 mb-6">
-      <h2 class="text-2xl font-bold text-stone-900 telugu-title">మీ రచనను సమర్పించండి</h2>
-      <p class="text-xs text-stone-500 mt-1">శీర్షిక, విభాగం, ఫోటో మరియు కథ వివరాలను పూరించండి. సమర్పించిన వెంటనే సైట్‌లో కనిపిస్తుంది.</p>
+<div class="row justify-content-center my-4">
+  <div class="col-lg-9 col-md-10">
+    <div class="card shadow-sm p-4 p-md-5 bg-white border rounded-3">
+      
+      <!-- Page Header -->
+      <div class="mb-4 pb-3 border-bottom">
+        <h2 class="fw-bold mb-2" style="color: #6a1b1a;">✍️ మీ రచనను సమర్పించండి</h2>
+        <p class="text-muted mb-0">శీర్షిక, విభాగం, కథ లేదా కవిత వివరాలను పూర్తి చేయండి. సమర్పించిన వెంటనే పాఠకులకు కనిపిస్తుంది.</p>
+      </div>
+
+      <!-- Submit Form -->
+      <form action="/submit" method="POST" enctype="multipart/form-data">
+        
+        <!-- Story Title -->
+        <div class="mb-4">
+          <label class="form-label fw-bold">రచన శీర్షిక (Title) <span class="text-danger">*</span></label>
+          <input 
+            type="text" 
+            name="title" 
+            class="form-control form-control-lg fs-6" 
+            placeholder="ఆకర్షణీయమైన శీర్షికను రాయండి (ఉదా: నిజాయితీకి తగిన బహుమతి)" 
+            required
+          >
+        </div>
+
+        <div class="row">
+          <!-- Category Selection -->
+          <div class="col-md-6 mb-4">
+            <label class="form-label fw-bold">విభాగం ఎంచుకోండి (Category) <span class="text-danger">*</span></label>
+            <select name="category" class="form-select form-select-lg fs-6" required>
+              <option value="" disabled selected>విభాగాన్ని ఎంచుకోండి...</option>
+              <option value="నీతి కథలు">నీతి కథలు</option>
+              <option value="పిట్ట కథలు">పిట్ట కథలు</option>
+              <option value="హాస్య కథలు">హాస్య కథలు</option>
+              <option value="కవితలు">కవితలు</option>
+              <option value="జీవిత సత్యాలు">జీవిత సత్యాలు</option>
+              <option value="ప్రేమకథలు">ప్రేమకథలు</option>
+              <option value="భయానక కథలు">భయానక కథలు</option>
+              <option value="సాధారణ కథలు">సాధారణ కథలు</option>
+            </select>
+          </div>
+
+          <!-- Cover Image Upload -->
+          <div class="col-md-6 mb-4">
+            <label class="form-label fw-bold">కథ ఫోటో (Optional Cover Image)</label>
+            <input type="file" name="coverImage" class="form-control form-control-lg fs-6" accept="image/*">
+            <small class="text-muted d-block mt-1">PNG, JPG లేదా WEBP ఫార్మాట్ ఎంచుకోవచ్చు.</small>
+          </div>
+        </div>
+
+        <!-- Story Content (Wide & Clear) -->
+        <div class="mb-4">
+          <label class="form-label fw-bold">రచన వివరాలు (Content) <span class="text-danger">*</span></label>
+          <textarea 
+            name="content" 
+            class="form-control" 
+            rows="12" 
+            style="line-height: 1.8; font-size: 1.05rem;" 
+            placeholder="మీ పూర్తి రచన లేదా కవితను ఇక్కడ టైప్ చేయండి లేదా పేస్ట్ చేయండి..." 
+            required
+          ></textarea>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="d-flex align-items-center justify-content-between pt-3 border-top">
+          <a href="/" class="btn btn-outline-secondary px-4 py-2">రద్దు చేయండి (Cancel)</a>
+          <button type="submit" class="btn btn-maroon px-5 py-2 fs-5 fw-bold shadow-sm">
+            🚀 ప్రచురించండి (Publish Story)
+          </button>
+        </div>
+
+      </form>
     </div>
-
-    <form action="/submit" method="POST" enctype="multipart/form-data" class="space-y-5">
-      <div>
-        <label class="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-1.5">రచన శీర్షిక (Title) *</label>
-        <input type="text" name="title" required placeholder="ఉదాహరణ: ఒక అందమైన జ్ఞాపకం..." class="w-full border border-stone-300 p-3 rounded-xl outline-none focus:ring-2 focus:ring-red-900 text-sm">
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <label class="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-1.5">విభాగం ఎంచుకోండి *</label>
-          <select name="category" class="w-full border border-stone-300 p-3 rounded-xl outline-none focus:ring-2 focus:ring-red-900 text-sm bg-white">
-            <option value="నీతి కథలు">నీతి కథలు</option>
-            <option value="పిట్ట కథలు">పిట్ట కథలు</option>
-            <option value="హాస్య కథలు">హాస్య కథలు</option>
-            <option value="కవితలు">కవితలు</option>
-            <option value="జీవిత సత్యాలు">జీవిత సత్యాలు</option>
-            <option value="ప్రేమకథలు">ప్రేమకథలు</option>
-            <option value="భయానక కథలు">భయానక కథలు</option>
-            <option value="సాధారణ కథలు">సాధారణ కథలు</option>
-          </select>
-        </div>
-
-        <div>
-          <label class="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-1.5">కథకు సంబంధించిన ఫోటో (ఐచ్ఛికం)</label>
-          <input type="file" name="coverImage" accept="image/*" class="w-full border border-stone-300 p-2 rounded-xl text-xs file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-red-50 file:text-red-900 hover:file:bg-red-100">
-        </div>
-      </div>
-
-      <div>
-        <label class="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-1.5">రచన వివరాలు (Content) *</label>
-        <textarea name="content" rows="12" required placeholder="మీ కథ, కవిత లేదా జీవిత సత్యాలను ఇక్కడ రాయండి..." class="w-full border border-stone-300 p-3 rounded-xl outline-none focus:ring-2 focus:ring-red-900 text-sm leading-relaxed"></textarea>
-      </div>
-
-      <button type="submit" class="w-full bg-red-900 text-white py-3 rounded-xl font-bold hover:bg-red-800 transition shadow-md">ప్రచురించండి (Publish Now)</button>
-    </form>
   </div>
-` }) %>
+</div>

@@ -1,0 +1,53 @@
+<div class="row justify-content-center my-4">
+  <div class="col-md-5 col-lg-4">
+    <div class="card shadow-sm p-4 bg-white border">
+      <h3 class="text-center fw-bold mb-4" style="color: #6a1b1a;">లాగిన్ (Login)</h3>
+
+      <% if (error) { %>
+        <div class="alert alert-danger py-2 small"><%= error %></div>
+      <% } %>
+
+      <form action="/login" method="POST">
+        <div class="mb-3">
+          <label class="form-label fw-semibold">యూజర్‌నేమ్ లేదా మొబైల్ / ఈమెయిల్</label>
+          <input type="text" name="identifier" class="form-control" placeholder="Username or Mobile/Email" required>
+        </div>
+
+        <div class="mb-3">
+          <div class="d-flex justify-content-between align-items-center mb-1">
+            <label class="form-label fw-semibold mb-0">పాస్‌వర్డ్</label>
+            <a href="/forgot-password" class="small text-decoration-none" style="color: #6a1b1a;">మర్చిపోయారా? (Forgot?)</a>
+          </div>
+          <div class="input-group">
+            <input type="password" name="password" id="loginPassword" class="form-control" placeholder="మీ పాస్‌వర్డ్" required>
+            <button class="btn btn-outline-secondary" type="button" onclick="togglePassword('loginPassword', this)">
+              <i class="fa fa-eye"></i>
+            </button>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-maroon w-100 py-2 fw-semibold">లాగిన్ అవ్వండి</button>
+      </form>
+
+      <div class="text-center mt-3">
+        <small class="text-muted">ఇంకా ఖాతా లేదా? <a href="/register" class="fw-bold" style="color: #6a1b1a;">ఖాతా తెరవండి</a></small>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function togglePassword(inputId, btn) {
+  const input = document.getElementById(inputId);
+  const icon = btn.querySelector('i');
+  if (input.type === 'password') {
+    input.type = 'text';
+    icon.classList.remove('fa-eye');
+    icon.classList.add('fa-eye-slash');
+  } else {
+    input.type = 'password';
+    icon.classList.remove('fa-eye-slash');
+    icon.classList.add('fa-eye');
+  }
+}
+</script>

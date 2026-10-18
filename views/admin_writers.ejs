@@ -1,0 +1,41 @@
+<div class="card p-4 shadow-sm bg-white border-0 my-3">
+  <div class="mb-4">
+    <h3 class="fw-bold" style="color: #6a1b1a;">రచయితల ఖాతాలు & పారితోషిక నిర్వహణ (Admin)</h3>
+    <p class="text-muted mb-0">ఏ రచయిత ఎన్ని కథలు రాశారో, వారికి ఎన్ని వీక్షణలు వచ్చాయో మరియు వారి చెల్లింపు వివరాలను ఇక్కడ చూడవచ్చు.</p>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-hover align-middle">
+      <thead class="table-light">
+        <tr>
+          <th>రచయిత పేరు</th>
+          <th>ఈమెయిల్ / మొబైల్</th>
+          <th>మొత్తం కథలు</th>
+          <th>మొత్తం వీక్షణలు (Views)</th>
+          <th>మొత్తం లైక్‌లు</th>
+          <th>UPI ID</th>
+          <th>బ్యాంక్ వివరాలు</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (writers && writers.length > 0) { %>
+          <% writers.forEach(w => { %>
+            <tr>
+              <td class="fw-bold"><%= w.username %></td>
+              <td><%= w.phone_email %></td>
+              <td><span class="badge bg-secondary"><%= w.total_stories %> కథలు</span></td>
+              <td><i class="fa fa-eye text-primary"></i> <%= w.total_views %> views</td>
+              <td><i class="fa fa-heart text-danger"></i> <%= w.total_likes %></td>
+              <td><%= w.upi_id || 'లేదు' %></td>
+              <td><small class="text-muted"><%= w.bank_details || 'లేదు' %></small></td>
+            </tr>
+          <% }) %>
+        <% } else { %>
+          <tr>
+            <td colspan="7" class="text-center text-muted py-4">రచయితలు ఎవరూ నమోదు కాలేదు.</td>
+          </tr>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -1,0 +1,65 @@
+<div class="row justify-content-center my-4">
+  <div class="col-md-6 col-lg-5">
+    <div class="card shadow-sm p-4 bg-white border">
+      <h3 class="text-center fw-bold mb-4" style="color: #6a1b1a;">కొత్త ఖాతా తెరవండి</h3>
+
+      <% if (error) { %>
+        <div class="alert alert-danger py-2 small"><%= error %></div>
+      <% } %>
+
+      <form action="/register" method="POST">
+        <div class="mb-3">
+          <label class="form-label fw-semibold">రచయిత / యూజర్ పేరు</label>
+          <input type="text" name="username" class="form-control" placeholder="మీ పేరు నమోదు చేయండి" required>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label fw-semibold">ఈమెయిల్ ఐడీ (పాస్‌వర్డ్ రీసెట్ కోసం)</label>
+          <input type="email" name="phone_email" class="form-control" placeholder="name@example.com" required>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label fw-semibold">పాస్‌వర్డ్</label>
+          <div class="input-group">
+            <input type="password" name="password" id="regPassword" class="form-control" placeholder="బలమైన పాస్‌వర్డ్" required>
+            <button class="btn btn-outline-secondary" type="button" onclick="togglePassword('regPassword', this)">
+              <i class="fa fa-eye"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label fw-semibold">UPI ID (ఆప్షనల్ - రివార్డుల కోసం)</label>
+          <input type="text" name="upi_id" class="form-control" placeholder="ఉదా: username@upi">
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label fw-semibold">బ్యాంక్ వివరాలు (ఆప్షనల్)</label>
+          <textarea name="bank_details" class="form-control" rows="2" placeholder="ఖాతా నంబర్, IFSC కోడ్"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-maroon w-100 py-2 fw-semibold">ఖాతా సృష్టించండి</button>
+      </form>
+
+      <div class="text-center mt-3">
+        <small class="text-muted">ఇప్పటికే ఖాతా ఉందా? <a href="/login" class="fw-bold" style="color: #6a1b1a;">లాగిన్ అవ్వండి</a></small>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function togglePassword(inputId, btn) {
+  const input = document.getElementById(inputId);
+  const icon = btn.querySelector('i');
+  if (input.type === 'password') {
+    input.type = 'text';
+    icon.classList.remove('fa-eye');
+    icon.classList.add('fa-eye-slash');
+  } else {
+    input.type = 'password';
+    icon.classList.remove('fa-eye-slash');
+    icon.classList.add('fa-eye');
+  }
+}
+</script>

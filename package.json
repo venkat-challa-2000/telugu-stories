@@ -1,0 +1,22 @@
+{
+  "name": "telugu-story-platform",
+  "version": "1.0.0",
+  "description": "Community Story Publishing Platform",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^18.0.8",
+    "ejs": "^3.1.10",
+    "express": "^4.19.2",
+    "express-ejs-layouts": "^2.5.1",
+    "express-session": "^1.18.0",
+    "multer": "^2.4.0",
+    "nodemailer": "^10.1.6",
+    "pg": "^8.23.1",
+    "slugify": "^1.6.6",
+    "sqlite3": "^5.1.7"
+  }
+}

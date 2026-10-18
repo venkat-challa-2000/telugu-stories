@@ -1,0 +1,86 @@
+<div class="row g-4">
+  <!-- Left Side: Latest & Popular Stories -->
+  <div class="col-lg-8">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <div>
+        <h3 class="fw-bold mb-0" style="color: #111;">తాజా రచనలు</h3>
+        <small class="text-muted">పాఠకులు, రచయితలు సమర్పించిన తాజా కథలు</small>
+      </div>
+      <a href="/submit" class="btn btn-maroon fw-semibold px-3 py-2" style="border-radius: 6px;">+ మీ రచన పంపండి</a>
+    </div>
+
+    <!-- Stories List Box -->
+    <% if (stories && stories.length > 0) { %>
+      <div class="d-flex flex-column gap-3 mb-5">
+        <% stories.forEach(story => { %>
+          <div class="card p-3 shadow-sm border-0">
+            <div class="d-flex justify-content-between">
+              <span class="badge bg-light text-dark border mb-2"><%= story.category %></span>
+              <small class="text-muted"><%= new Date(story.created_at).toLocaleDateString('te-IN') %></small>
+            </div>
+            <h4><a href="/story/<%= story.slug %>" class="text-decoration-none fw-bold" style="color: #6a1b1a;"><%= story.title %></a></h4>
+            <p class="text-muted"><%= story.content.slice(0, 160) %>...</p>
+            <div class="d-flex justify-content-between align-items-center">
+              <small class="text-muted">రచయిత: <b><%= story.author_name || 'రచయిత' %></b></small>
+              <div class="text-muted small">
+                <span class="me-3"><i class="fa fa-eye"></i> <%= story.views %></span>
+                <span><i class="fa fa-heart text-danger"></i> <%= story.likes %></span>
+              </div>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    <% } else { %>
+      <div class="p-5 text-center my-4" style="border: 2px dashed #dedede; border-radius: 12px; background: #ffffff;">
+        <div class="fs-1 mb-2">📬</div>
+        <p class="text-muted fw-semibold mb-3">ఈ విభాగంలో ఇంకా ఏ రచనలూ రాలేదు.<br>మొదటి రచనను మీరే ప్రచురించండి!</p>
+        <a href="/submit" class="btn btn-maroon px-4 py-2 fw-bold" style="border-radius: 20px;">ఇప్పుడే రాయండి</a>
+      </div>
+    <% } %>
+
+    <!-- Popular Section -->
+    <div class="mt-4 pt-3 border-top">
+      <h5 class="fw-bold mb-3">🔥 పాపులర్ రచనలు (Popular)</h5>
+      <% if (popularStories && popularStories.length > 0) { %>
+        <ul class="list-group list-group-flush bg-transparent">
+          <% popularStories.forEach(story => { %>
+            <li class="list-group-item bg-transparent px-0 d-flex justify-content-between align-items-center">
+              <a href="/story/<%= story.slug %>" class="text-decoration-none fw-semibold" style="color: #6a1b1a;"><%= story.title %></a>
+              <span class="badge bg-light text-dark border"><i class="fa fa-eye"></i> <%= story.views %></span>
+            </li>
+          <% }) %>
+        </ul>
+      <% } else { %>
+        <p class="text-muted small">ఇంకా కథలు లేవు.</p>
+      <% } %>
+    </div>
+  </div>
+
+  <!-- Right Side: Categories & Invite Banner -->
+  <div class="col-lg-4">
+    <!-- Categories Sidebar -->
+    <div class="sidebar-card p-4 shadow-sm mb-4">
+      <h5 class="fw-bold mb-3 d-flex align-items-center gap-2">
+        <span class="text-warning fs-5">📁</span> <span>విభాగాలు (Categories)</span>
+      </h5>
+      <div class="d-flex flex-column gap-2">
+        <% categories.forEach(cat => { %>
+          <a href="/?category=<%= encodeURIComponent(cat.name) %>" class="text-decoration-none d-flex justify-content-between align-items-center py-2 px-2 rounded hover-bg" style="color: #333;">
+            <div class="d-flex align-items-center gap-2">
+              <span class="text-warning">📁</span>
+              <span><%= cat.name %></span>
+            </div>
+            <span class="badge bg-light text-muted border rounded-pill"><%= cat.count %></span>
+          </a>
+        <% }) %>
+      </div>
+    </div>
+
+    <!-- Writers Welcome Box -->
+    <div class="invite-box p-4 shadow-sm">
+      <h5 class="fw-bold text-dark mb-2">మీ రచనను పంపండి! ✍️</h5>
+      <p class="small text-muted mb-3">మీ కథలు, కవితలు లేదా అనుభవాలను నలుగురితో పంచుకోండి. మీ రచనను వేలాది పాఠకులకు చేర్చండి.</p>
+      <a href="/submit" class="btn btn-maroon w-100 py-2 fw-bold">రచనను ప్రారంభించండి</a>
+    </div>
+  </div>
+</div>
